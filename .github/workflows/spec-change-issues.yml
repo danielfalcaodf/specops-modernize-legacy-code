@@ -1,0 +1,26 @@
+name: Create Issues for Specification Changes
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  spec-change-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Need history for diff
+
+      - uses: spec-ops-method/spec-ops-action@v1
+        with:
+          file-pattern: 'docs/SPECIFICATION.md'
+          labels: 'spec-change,needs-review'
+          issue-title-template: '[SPEC] {{ filename }} updated'
+          include-diff: true
+          include-file-link: true
+          include-commit-link: true
